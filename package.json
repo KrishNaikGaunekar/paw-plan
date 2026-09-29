@@ -1,0 +1,18 @@
+{
+  "name": "paw-plan",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NC State Agribusiness Management degree planning tool (client-side only).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.3.289"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

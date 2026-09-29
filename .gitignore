@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+_original-index.html
+_smoke-test.mjs

@@ -1,0 +1,50 @@
+/* NC State design tokens — ported from the original AREAdvising index.html.
+   The source file actually defines TWO `:root` blocks (CSS cascade order wins):
+   an initial warm/rounded palette (~line 378), then a second block (~line 536,
+   "NC State redesign skin") that overrides most of those same variables with
+   the stricter black/red/white NC State brand look. Because :root rules
+   cascade, the SECOND block's values are what actually render on the live
+   site today. The values below are the effective (merged/cascaded) result —
+   values redefined by the second block, plus the handful of variables
+   (--invite, --review, --info, --prereq, --drop-target) that the second
+   block never touched and so still come from the first block. */
+:root{
+  --red:#CC0000;
+  --red-dark:#990000;
+  --ink:#000;
+  --bg:#fff;
+  --surface:#fff;
+  --surface-2:#F2F2F2;
+  --surface-3:#E5E5E5;
+  --border:#C7C7C7;
+  --border-hi:#777;
+  --text:#1F1F1F;
+  --text-2:#555;
+  --text-3:#666;
+
+  /* status/semantic colors — untouched by the redesign-skin override */
+  --invite:#15803D;
+  --review:#B45309;
+  --info:#2563EB;
+  --prereq:#2563EB;
+  --drop-target:rgba(21,128,61,0.05);
+
+  /* typography */
+  --display:'Roboto Slab',Georgia,serif;
+  --font-body:'Roboto',Arial,sans-serif;
+  --font-condensed:'Roboto Condensed',Arial,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  /* surface treatment — the NC State skin is flat: no shadow, no radius */
+  --shadow-sm:none;
+  --shadow-md:none;
+  --shadow-lg:0 16px 42px rgba(0,0,0,.24);
+  --radius:0;
+}
+
+/* Google Fonts loaded by the original page (index.html <head> line 15):
+   Inter:400,500,600,700 · JetBrains+Mono:400,500,600 · Roboto:400,500,700,900 ·
+   Roboto+Condensed:500,700 · Roboto+Slab:500,700
+   Inter is still used by --font-body/system fallback in a few pre-redesign
+   rules but the active skin's body font is Roboto — keep both families
+   loaded if any legacy component styles are reused. */
