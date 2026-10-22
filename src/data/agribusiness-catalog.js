@@ -362,10 +362,18 @@ export const DEFAULT_PLAN = [
   { term: "Summer I & II — Year 2", courses: [] },
   { term: "Summer I & II — Year 3", courses: [] },
   { term: "Summer I & II — Year 4", courses: [] },
-  { term: "Completed NC State Courses", courses: [] },
-  { term: "Transfer / Test / Prior Credit", courses: [] },
-  { term: "In Progress / Planned from Audit", courses: [] }
+  { term: "Taken / Transferred", courses: [] },
+  { term: "In Progress (current term)", courses: [] }
 ];
+
+// Fixed (non-schedulable) plan sections that hold courses from the audit rather than
+// future plans. Term labels must not contain a season + year/"Year N", or the prereq
+// engine would treat them as schedulable semesters.
+export const TAKEN_TERM = "Taken / Transferred";
+export const IN_PROGRESS_TERM = "In Progress (current term)";
+// Bucket names used by earlier builds; kept so older autosaves/save files still render.
+export const LEGACY_BUCKET_TERMS = ["Completed NC State Courses", "Transfer / Test / Prior Credit", "In Progress / Planned from Audit"];
+export const BUCKET_TERMS = [TAKEN_TERM, IN_PROGRESS_TERM, ...LEGACY_BUCKET_TERMS];
 
 // Minors surfaced by the Minor Explorer. Note: the original toolbar button/site copy only
 // advertises "Minor Explorer (Economics)", but the underlying data actually covers THREE

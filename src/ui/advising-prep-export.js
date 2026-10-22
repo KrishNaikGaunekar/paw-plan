@@ -5,8 +5,7 @@
 
 import { planStore } from '../state/plan-store.js';
 import { semesterCreditTotal, isSemesterOverLimit, verifyGEP } from '../state/credit-rules.js';
-
-const BUCKET_TERMS = ['Completed NC State Courses', 'Transfer / Test / Prior Credit', 'In Progress / Planned from Audit'];
+import { BUCKET_TERMS } from '../data/agribusiness-catalog.js';
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

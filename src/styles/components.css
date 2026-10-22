@@ -143,7 +143,9 @@
 .panel-restore { border-left-color: var(--review); background: #FFFBEB; }
 .panel-welcome { border-left-color: var(--red); }
 .panel-flagged { border-left-color: var(--review); cursor: pointer; }
-.panel-flagged ul { margin: 10px 0 0; padding-left: 20px; font-size: .88rem; }
+.panel-flagged ul, .panel-nondegree ul { margin: 10px 0 0; padding-left: 20px; font-size: .88rem; }
+.panel-nondegree { border-left-color: var(--border-hi); cursor: pointer; }
+.panel-note { margin: 8px 0 0; font-size: .82rem; color: var(--text-2); }
 .panel-actions { display: flex; gap: 8px; margin-top: 10px; }
 .panel-dismiss {
   position: absolute; top: 8px; right: 10px;
@@ -165,9 +167,22 @@
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 14px;
 }
-.semester-grid-buckets { margin-top: 10px; }
-.audit-history { margin: 18px 0; }
-.audit-history summary { cursor: pointer; font-weight: 600; color: var(--text-2); margin-bottom: 8px; }
+/* Fixed sections from the audit: Taken / Transferred, In Progress */
+.bucket-grid { display: grid; gap: 14px; margin-bottom: 22px; }
+.semester-bucket .semester-header h3 { font-size: 1rem; }
+.semester-blurb { margin: -2px 0 10px; font-size: .8rem; color: var(--text-2); }
+.semester-courses.semester-courses-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 6px;
+}
+.plan-heading {
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-size: 1rem;
+  margin: 0 0 10px;
+}
 
 .semester-card {
   border: 1px solid var(--border);
@@ -221,6 +236,8 @@
 .course-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 .course-units { font-size: .72rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
 .course-badge { font-size: .68rem; background: var(--surface-3); padding: 1px 5px; border-radius: 3px; }
+.course-badge-note { background: transparent; border: 1px solid var(--border); color: var(--text-2); }
+.course-term { font-size: .7rem; color: var(--text-3); }
 
 /* ---------- Modal ---------- */
 .modal-overlay {

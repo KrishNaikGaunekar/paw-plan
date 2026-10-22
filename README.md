@@ -13,6 +13,16 @@ npm install
 npm run dev
 ```
 
+## Checking the audit parser
+
+```
+npm run check-audit -- "path/to/Degree Audit.pdf"          # plan summary
+npm run check-audit -- "path/to/Degree Audit.pdf" --rows   # plus every parsed audit row
+```
+
+Runs the same pipeline as the upload button, in Node. Degree audits are student records:
+keep them out of the repo.
+
 ## Build & deploy
 
 ```
@@ -27,7 +37,10 @@ Outputs a static site to `dist/`. Pushing to `main` deploys automatically to Git
 src/
   main.js                        entry point
   state/plan-store.js            plan state, undo history, localStorage autosave
-  audit/pawplan-audit-core.js    degree-audit PDF text → structured plan data
+  audit/audit-rows.js            PDF text positions → audit table rows (status icon, class, units, term, grade)
+  audit/mypack-audit-parser.js   rows → taken / in progress / still needed / not applied / advisor review
+  audit/upload-flow.js           classified audit → plan (Taken / Transferred, In Progress, future terms)
+  audit/pawplan-audit-core.js    original line-based parser, used as a fallback for unrecognized exports
   data/agribusiness-catalog.js   course/prerequisite/requirement data
   ui/                            toolbar, semester grid, panels
   styles/                        design tokens + component styles

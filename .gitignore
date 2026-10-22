@@ -4,3 +4,4 @@ dist/
 *.log
 _original-index.html
 _smoke-test.mjs
+scratch/

@@ -1,7 +1,6 @@
-// Turns an uploaded degree-audit PDF into raw text, reconstructed into rows the
-// line-oriented audit parser (pawplan-audit-core.js) can read. See the ROW_START_X
-// comment below — this is the one part of the pipeline that had to be tuned against
-// a real MyPack audit export; the parsing logic itself is untouched.
+// Reads an uploaded degree-audit PDF with pdf.js. The positioned fragments feed the
+// table parser in audit-rows.js; the ROW_START_X line-joining below is the older text
+// reconstruction, kept only as a fallback for exports without a recognizable table.
 
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
@@ -33,13 +32,24 @@ function itemsToLines(items) {
   return lines.join('\n');
 }
 
-export async function extractTextFromPdf(arrayBuffer) {
+/**
+ * Returns both representations of the PDF:
+ *   pages - positioned text fragments, read by audit-rows.js (the primary parser)
+ *   text  - the older line-joined text, used only when no audit table is recognized
+ */
+export async function extractAuditFromPdf(arrayBuffer) {
   const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
   const pages = [];
+  const textPages = [];
   for (let i = 1; i <= doc.numPages; i++) {
     const page = await doc.getPage(i);
     const content = await page.getTextContent();
-    pages.push(itemsToLines(content.items));
+    pages.push({ items: content.items.map((it) => ({ str: it.str, x: it.transform[4], y: it.transform[5] })) });
+    textPages.push(itemsToLines(content.items));
   }
-  return pages.join('\n');
+  return { pages, text: textPages.join('\n') };
+}
+
+export async function extractTextFromPdf(arrayBuffer) {
+  return (await extractAuditFromPdf(arrayBuffer)).text;
 }

@@ -108,23 +108,37 @@ export function computeWhatIf(state) {
  * completed + posted-transfer credits count as "applied", everything else that
  * isn't an unpicked placeholder counts as "planned," and Planned = applied + planned
  * (the label is a little confusing but that's what the original showed).
+ *
+ * Once an audit is loaded, unpicked "Click to choose" slots DO count: the future plan
+ * is built from exactly the requirements the audit says are left, so each slot is
+ * real remaining credit. Avg/Sem is the future credit load per future Fall/Spring term.
  */
 export function computeCreditSummary(state) {
   let applied = 0;
   let planned = 0;
   let transferredTotal = 0;
+  let futureCredits = 0;
+  const futureTerms = new Set();
 
   state.plan.forEach((section) => {
     section.courses.forEach((c) => {
       if (c.synthetic) return; // the natsci-gap placeholder isn't real applied/planned credit
       const units = resolveCredits(c);
+      const isPlaceholder = String(c.name || '').startsWith('Click');
       if (c.classification === 'completed_nc_state' || c.classification === 'transfer_posted') {
         applied += units;
         if (c.classification === 'transfer_posted') transferredTotal += units;
-      } else if (c.classification === 'planned_current') {
+        return;
+      }
+      if (c.classification === 'planned_current') {
         planned += units;
-      } else if (!String(c.name || '').startsWith('Click')) {
-        planned += units;
+        return;
+      }
+      if (isPlaceholder && !state.uploadedMode) return;
+      planned += units;
+      if (isSchedulableTerm(section.term)) {
+        futureCredits += units;
+        if (!/Summer/i.test(section.term)) futureTerms.add(section.term);
       }
     });
   });
@@ -135,11 +149,14 @@ export function computeCreditSummary(state) {
   });
 
   const regularSemesters = state.plan.filter((s) => isSchedulableTerm(s.term) && !/Summer/i.test(s.term)).length;
+  const avgPerSem = state.uploadedMode
+    ? futureTerms.size > 0 ? Math.round(futureCredits / futureTerms.size) : 0
+    : regularSemesters > 0 ? Math.round(planned / regularSemesters) : 0;
 
   return {
     totalRequired: TOTAL_DEGREE_CREDITS,
     planned: applied + planned,
-    avgPerSem: regularSemesters > 0 ? Math.round(planned / regularSemesters) : 0,
+    avgPerSem,
     transferred: transferredTotal,
   };
 }

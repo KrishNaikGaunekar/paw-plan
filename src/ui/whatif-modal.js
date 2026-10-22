@@ -8,18 +8,24 @@ import { computeWhatIf, TARGET_LOAD, TOTAL_DEGREE_CREDITS } from '../state/credi
 import { planStore } from '../state/plan-store.js';
 import { openModal } from './modal.js';
 
-function nextTerms(fromCount, count) {
-  // Simple Fall/Spring alternation label generator for the projection list.
+// Fall/Spring labels for the projection, starting at the plan's first future semester:
+// real terms ("Spring 2027") for audit-based plans, "Fall — Year 1" for the blank template.
+function projectTerms(firstTerm, count) {
+  const real = String(firstTerm || '').match(/^(Spring|Fall)\s+(\d{4})$/);
+  const rel = String(firstTerm || '').match(/^(Spring|Fall)\D*Year\s*(\d+)/);
+  let season = (real || rel)?.[1] || 'Fall';
+  let year = parseInt((real || rel)?.[2] || '1', 10);
   const labels = [];
-  let season = fromCount % 2 === 0 ? 'Fall' : 'Spring';
-  let year = Math.floor(fromCount / 2) + 1;
   for (let i = 0; i < count; i++) {
-    labels.push(`${season} — Year ${year}`);
+    labels.push(real ? `${season} ${year}` : `${season} — Year ${year}`);
+    // Calendar years roll over in Spring (Fall 2027 -> Spring 2028); academic
+    // "Year N" rolls over in Fall (Spring — Year 1 -> Fall — Year 2).
     if (season === 'Fall') {
       season = 'Spring';
+      if (real) year += 1;
     } else {
       season = 'Fall';
-      year += 1;
+      if (!real) year += 1;
     }
   }
   return labels;
@@ -33,7 +39,7 @@ export function openWhatIf() {
 
   const render = (creditsPerSem) => {
     const semestersNeeded = creditsPerSem > 0 ? Math.ceil(remaining / creditsPerSem) : 0;
-    const projected = nextTerms(timeline.length, semestersNeeded);
+    const projected = projectTerms(timeline[0]?.term, semestersNeeded);
     body.innerHTML = `
       <div class="whatif-summary">
         <div><strong>${completed}</strong><span>credits completed</span></div>

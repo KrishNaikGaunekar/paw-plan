@@ -54,6 +54,10 @@ const SEASON_RANK = { Fall: 0, Spring: 1, Summer: 2 };
 // Courses / Transfer.../ In Progress...) are already "in the past" relative to any
 // schedulable semester, so they rank below everything.
 export function termRank(term) {
+  // Plans built from an uploaded audit use real terms ("Spring 2027"); the blank
+  // template uses relative ones ("Fall — Year 1"). A plan only ever uses one style.
+  const real = String(term || '').match(/^(Spring|Summer|Fall)\s+(\d{4})$/);
+  if (real) return parseInt(real[2], 10) * 3 + { Spring: 0, Summer: 1, Fall: 2 }[real[1]];
   const m = String(term || '').match(/(Fall|Spring|Summer)[^Y]*Year\s*(\d)/i);
   if (!m) return -1;
   const year = parseInt(m[2], 10);

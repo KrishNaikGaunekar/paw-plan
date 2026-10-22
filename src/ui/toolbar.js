@@ -4,7 +4,7 @@
 // only guidance students get for finding the right PDF, so it's preserved verbatim.
 
 import { planStore } from '../state/plan-store.js';
-import { buildPlanFromAuditText } from '../audit/upload-flow.js';
+import { buildPlanFromAudit } from '../audit/upload-flow.js';
 import { openModal, closeModal } from './modal.js';
 import { showToast } from './toast.js';
 import { setTransferMode, isTransferMode } from './semester-grid.js';
@@ -152,18 +152,46 @@ async function handleFileSelected(file) {
   try {
     // Lazy-loaded: pdf.js is a large dependency that only matters once someone
     // actually uploads a file — no reason to ship it in the initial page load.
-    const { extractTextFromPdf } = await import('../audit/pdf-text-extractor.js');
+    const { extractAuditFromPdf } = await import('../audit/pdf-text-extractor.js');
     const buffer = await file.arrayBuffer();
-    const text = await extractTextFromPdf(buffer);
-    const { plan, advisorReview, nonDegree } = buildPlanFromAuditText(text);
+    const extracted = await extractAuditFromPdf(buffer);
+    // A PDF saved as pictures (screenshots, "Microsoft Print to PDF") has no readable text.
+    if (extracted.text.replace(/\s/g, '').length < 100 || !/\b[A-Z]{1,4}\s+\d{3}/.test(extracted.text)) {
+      openUnreadablePdfHelp();
+      return;
+    }
+    const { plan, advisorReview, nonDegree, summary } = buildPlanFromAudit(extracted);
     planStore.loadAuditPlan(plan, { advisorReview, nonDegree });
     planStore.armAutosave();
-    showToast('Degree audit loaded.', { kind: 'success' });
+    showToast(
+      `Degree audit loaded: ${summary.takenCredits} cr taken, ${summary.inProgressCredits} cr in progress, ${summary.remainingCredits} cr left to plan.`,
+      { kind: 'success', duration: 6000 },
+    );
     rerenderFn();
   } catch (err) {
     console.error(err);
     showToast('Could not read that PDF. Make sure it’s a MyPack Degree Audit saved as PDF.', { kind: 'error', duration: 6000 });
   }
+}
+
+function openUnreadablePdfHelp() {
+  const body = document.createElement('div');
+  body.className = 'upload-instructions';
+  body.innerHTML = `
+    <p>Paw Plan couldn’t find any course information in this PDF. It was probably saved as a picture
+    (a screenshot, or printed with “Microsoft Print to PDF”) instead of as text.</p>
+    <ol>
+      <li>Open your degree audit in <strong>MyPack</strong></li>
+      <li>Press <strong>Ctrl+P</strong> (Cmd+P on Mac)</li>
+      <li>Set the destination to <strong>“Save as PDF”</strong>, not “Microsoft Print to PDF”</li>
+      <li>Upload that PDF to Paw Plan</li>
+    </ol>
+  `;
+  openModal({
+    title: 'Could not read this PDF',
+    bodyEl: body,
+    actions: [{ label: 'OK', kind: 'secondary' }],
+  });
 }
 
 function saveToFile() {

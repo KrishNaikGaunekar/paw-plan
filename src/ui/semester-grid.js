@@ -1,17 +1,24 @@
 // The core planner: semester cards, course chips, drag-and-drop + tap-to-move,
-// prerequisite enforcement, and the "audit history" buckets (Completed NC State
-// Courses / Transfer / In Progress). See NOTES-original-behavior.md "Drag-and-drop
-// planner + prerequisite enforcement".
+// prerequisite enforcement, and the fixed "Taken / Transferred" and "In Progress"
+// sections that show what the degree audit says is already done. See
+// NOTES-original-behavior.md "Drag-and-drop planner + prerequisite enforcement".
 
 import { planStore } from '../state/plan-store.js';
 import { isSchedulableTerm } from '../state/prereq-engine.js';
 import { semesterCreditTotal, isSemesterOverLimit } from '../state/credit-rules.js';
-import { CATEGORIES } from '../data/agribusiness-catalog.js';
+import { CATEGORIES, BUCKET_TERMS, TAKEN_TERM, IN_PROGRESS_TERM } from '../data/agribusiness-catalog.js';
 import { openCoursePicker } from './course-picker-modal.js';
 import { openModal, closeModal } from './modal.js';
 import { showToast } from './toast.js';
 
-const BUCKET_TERMS = ['Completed NC State Courses', 'Transfer / Test / Prior Credit', 'In Progress / Planned from Audit'];
+// Where Transfer Mode puts courses: the Taken section, or the legacy transfer bucket in
+// plans saved by older builds.
+const TRANSFER_HOME_TERMS = [TAKEN_TERM, 'Transfer / Test / Prior Credit'];
+
+const BUCKET_BLURBS = {
+  [TAKEN_TERM]: 'Completed at NC State, transferred, or earned by exam — exactly as your degree audit lists them.',
+  [IN_PROGRESS_TERM]: 'Courses you are enrolled in now.',
+};
 
 let tapSelectedId = null;
 let transferModeOn = false;
@@ -46,8 +53,19 @@ function courseChipHtml(course, term) {
   const interactive = isInteractive(course, term);
   const draggable = interactive && !transferModeOn;
 
-  const gradeBadge = course.historical && /\(([^()]+)\)/.test(course.name)
-    ? `<span class="course-badge">${course.name.match(/\(([^()]+)\)/)[1]}</span>`
+  // Older saved plans encoded the grade in the name ("ARE 201 (A) — Fall 2025").
+  const grade = course.grade || (course.historical && (String(course.name).match(/\(([^()]+)\)/) || [])[1]) || '';
+  const gradeBadge = grade ? `<span class="course-badge" title="Grade">${escapeHtml(grade)}</span>` : '';
+  const NOTE_TITLES = {
+    Generic: 'Generic transfer credit (e.g. ACC 2**): it counts, but has no exact NC State equivalent',
+    'Excess units': 'The audit notes this course provides more credit than the requirement needs',
+  };
+  const noteBadge = course.note
+    ? `<span class="course-badge course-badge-note" title="${escapeAttr(NOTE_TITLES[course.note] || course.note)}">${escapeHtml(course.note)}</span>`
+    : '';
+  // Where a Taken course's credit came from (NC State, Transfer, Exam), per its audit grade.
+  const termLine = course.termTaken || course.source
+    ? `<span class="course-term">${escapeHtml([course.source, course.termTaken].filter(Boolean).join(' · '))}</span>`
     : '';
 
   return `
@@ -63,8 +81,10 @@ function courseChipHtml(course, term) {
       <span class="course-main">
         <span class="course-code">${escapeHtml(course.code || '')}</span>
         <span class="course-name">${escapeHtml(course.name || '')}</span>
+        ${termLine}
       </span>
       <span class="course-meta">
+        ${noteBadge}
         ${gradeBadge}
         <span class="course-units">${course.units || 0}cr</span>
       </span>
@@ -98,41 +118,47 @@ function semesterCardHtml(section) {
     </div>`;
 }
 
+function bucketCardHtml(section, extraChips = []) {
+  const chips = section.courses.map((c) => courseChipHtml(c, section.term)).concat(extraChips);
+  const total = semesterCreditTotal(section) + (extraChips.credits || 0);
+  return `
+    <section class="semester-card semester-fixed semester-bucket" data-term="${escapeAttr(section.term)}">
+      <div class="semester-header">
+        <h3>${escapeHtml(section.term)}</h3>
+        <span class="semester-credits">${chips.length} course${chips.length === 1 ? '' : 's'} · ${total} cr</span>
+      </div>
+      ${BUCKET_BLURBS[section.term] ? `<p class="semester-blurb">${BUCKET_BLURBS[section.term]}</p>` : ''}
+      <div class="semester-courses semester-courses-wide">
+        ${chips.join('') || '<p class="semester-empty">Nothing here yet.</p>'}
+      </div>
+    </section>`;
+}
+
 export function renderSemesterGrid(container) {
   const { plan, transferred } = planStore.state;
   const schedulable = plan.filter((s) => !BUCKET_TERMS.includes(s.term));
-  const buckets = plan.filter((s) => BUCKET_TERMS.includes(s.term));
+  const buckets = plan.filter((s) => BUCKET_TERMS.includes(s.term) && (s.courses.length || TRANSFER_HOME_TERMS.includes(s.term)));
 
-  const transferSection = buckets.find((s) => s.term === 'Transfer / Test / Prior Credit');
-  const transferChips = (transferred || []).map((c) => courseChipHtml({ ...c, historical: false }, transferSection?.term || ''));
+  // Courses moved there with Transfer Mode render inside the Taken section.
+  const home = buckets.find((s) => TRANSFER_HOME_TERMS.includes(s.term));
+  const transferChips = (transferred || []).map((c) => courseChipHtml({ ...c, historical: false }, home?.term || ''));
+  transferChips.credits = (transferred || []).reduce((n, c) => n + (c.units || 0), 0);
+  const noExtra = Object.assign([], { credits: 0 });
+
+  const showBuckets = planStore.state.uploadedMode || buckets.some((s) => s.courses.length) || transferChips.length;
 
   container.innerHTML = `
+    ${showBuckets ? `
+    <div class="bucket-grid">
+      ${buckets.map((s) => bucketCardHtml(s, s === home ? transferChips : noExtra)).join('')}
+    </div>
+    <h2 class="plan-heading">Still to take</h2>` : ''}
     <div class="semester-grid">
       ${schedulable.map(semesterCardHtml).join('')}
       <div class="semester-card semester-add">
         <button type="button" class="btn btn-secondary" data-action="add-semester">+ Add Semester</button>
       </div>
     </div>
-    <details class="audit-history">
-      <summary>Audit history (completed, transferred &amp; in-progress courses)</summary>
-      <div class="semester-grid semester-grid-buckets">
-        ${buckets
-          .map((s) => {
-            if (s.term !== 'Transfer / Test / Prior Credit') return semesterCardHtml(s);
-            const total = semesterCreditTotal(s) + (transferred || []).reduce((n, c) => n + (c.units || 0), 0);
-            return `
-              <div class="semester-card semester-fixed" data-term="${escapeAttr(s.term)}">
-                <div class="semester-header"><h3>${escapeHtml(s.term)}</h3><span class="semester-credits">${total} cr</span></div>
-                <div class="semester-courses">
-                  ${s.courses.map((c) => courseChipHtml(c, s.term)).join('')}
-                  ${transferChips.join('')}
-                  ${!s.courses.length && !transferChips.length ? '<p class="semester-empty">Nothing here yet.</p>' : ''}
-                </div>
-              </div>`;
-          })
-          .join('')}
-      </div>
-    </details>
     ${pendingMoveBarHtml()}`;
 
   wireCardDropTargets(container);
@@ -328,7 +354,9 @@ function applyTapHighlighting(container) {
 }
 
 function onAddSemester() {
-  const label = window.prompt('Name this semester (e.g. "Summer — Year 5"):');
+  const { plan: current } = planStore.state;
+  const example = current.some((s) => /^(Spring|Summer|Fall) \d{4}$/.test(s.term)) ? 'Fall 2030' : 'Summer — Year 5';
+  const label = window.prompt(`Name this semester (e.g. "${example}"):`);
   if (!label) return;
   const { plan } = planStore.state;
   const lastSchedulable = [...plan].reverse().find((s) => !BUCKET_TERMS.includes(s.term));
