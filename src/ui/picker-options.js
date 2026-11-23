@@ -25,7 +25,11 @@ const GROUPED_LISTS = {
 /**
  * @returns {{ mode: 'grouped', groups: {g,courses}[] } | { mode: 'flat', courses: {c,n}[] } | { mode: 'freetext', hint: string, validate: (code:string)=>boolean }}
  */
-export function resolvePickerOptions(pickerId) {
+export function resolvePickerOptions(pickerId, slot) {
+  // Second-major choice slots carry their own option list (see state/second-program.js).
+  if (slot?.pickerOptions?.length) {
+    return { mode: 'flat', courses: slot.pickerOptions };
+  }
   if (pickerId === 'free') {
     return {
       mode: 'freetext',
