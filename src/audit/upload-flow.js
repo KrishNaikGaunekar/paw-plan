@@ -117,7 +117,7 @@ function termAfterToday() {
   return `Fall ${y}`;
 }
 
-function toHistoryChip(item, i, prefix) {
+export function toHistoryChip(item, i, prefix) {
   return {
     id: `${prefix}-${i}`,
     code: item.code || item.title,
@@ -202,10 +202,14 @@ function packFutureSemesters(slots, doneCodes, startTerm) {
  * @param {{pages?: object[], text?: string}} extracted - from pdf-text-extractor.js
  * @returns {{ plan: object[], advisorReview: object[], nonDegree: object[], summary: object }}
  */
-export function buildPlanFromAudit(extracted) {
+export function classifyExtractedAudit(extracted) {
   const table = extracted.pages ? extractAuditRows(extracted.pages) : { rows: [], hasTable: false };
   const rows = table.hasTable ? table.rows : rowsFromLegacyText(extracted.text || '');
-  const result = classifyAuditRows(rows);
+  return { result: classifyAuditRows(rows), table };
+}
+
+export function buildPlanFromAudit(extracted) {
+  const { result, table } = classifyExtractedAudit(extracted);
 
   const takenChips = result.taken.map((c, i) => toHistoryChip(c, i, 'taken'));
   const inProgressChips = result.inProgress.map((c, i) => toHistoryChip(c, i, 'ip'));

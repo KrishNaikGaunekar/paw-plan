@@ -10,7 +10,7 @@ function flattenGroups(groups) {
 }
 
 export function openCoursePicker(placeholder) {
-  const resolved = resolvePickerOptions(placeholder.picker);
+  const resolved = resolvePickerOptions(placeholder.picker, placeholder);
   const allCourses = resolved.mode === 'grouped' ? flattenGroups(resolved.groups) : resolved.mode === 'flat' ? resolved.courses : [];
 
   const body = document.createElement('div');

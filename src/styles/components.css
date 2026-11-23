@@ -326,6 +326,13 @@
 .minor-req-options { margin-top: 4px; font-size: .78rem; }
 .minor-gpa, .minor-notes { font-size: .82rem; color: var(--text-2); }
 
+/* ---------- Explorer dropdowns, Double Major, 2nd audit ---------- */
+.explorer-select-label, .second-name-label { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 16px; font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-2); }
+.explorer-select, .second-name-input { font: inherit; font-size: .95rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text); padding: .5em .6em; border: 1px solid var(--border-hi); background: var(--surface); max-width: 100%; }
+.double-major-actions { margin-top: 12px; }
+.explorer-unverified { font-size: .8rem; color: var(--review); border-left: 3px solid var(--review); padding: 4px 10px; margin: 8px 0 12px; background: var(--surface-2); }
+.brand-second-program { display: inline-block; margin-top: 4px; padding: 2px 8px; font-size: .72rem; font-weight: 600; letter-spacing: .03em; color: #fff; background: rgba(0,0,0,.28); }
+
 /* ---------- What-If ---------- */
 .whatif-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; text-align: center; }
 .whatif-summary > div { border: 1px solid var(--border); padding: 10px 4px; }

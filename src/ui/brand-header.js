@@ -26,6 +26,7 @@ export function renderBrandHeader(container) {
           <div>
             <h1 class="brand-title"><span class="brand-title-main">Paw Plan</span><span class="brand-title-divider">|</span>Agribusiness Management, BS</h1>
             <div class="brand-subtitle">College of Agriculture &amp; Life Sciences · NC State University · Interactive 4-Year Degree Planner</div>
+            ${planStore.state.secondProgram ? `<span class="brand-second-program">+ ${escapeHtml(planStore.state.secondProgram.name)} — 2nd major</span>` : ''}
           </div>
         </div>
         <div class="credit-summary">
@@ -36,4 +37,8 @@ export function renderBrandHeader(container) {
         </div>
       </div>
     </div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }

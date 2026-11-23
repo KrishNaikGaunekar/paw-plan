@@ -8,6 +8,7 @@
 import { DEFAULT_PLAN, AUTOSAVE_KEY, AUTOSAVE_SCHEMA_VERSION } from '../data/agribusiness-catalog.js';
 import { checkPrereqViolation } from './prereq-engine.js';
 import { reconcileNaturalScienceGap } from './credit-rules.js';
+import { stripSecondProgram } from './second-program.js';
 
 const UNDO_LIMIT = 30;
 const AUTOSAVE_DEBOUNCE_MS = 600;
@@ -23,6 +24,7 @@ function freshState() {
     nonDegree: [],
     advisorReview: [],
     withdrawn: [],
+    secondProgram: null,
     uploadedMode: false,
   };
 }
@@ -36,6 +38,7 @@ function buildSaveData(state) {
     nonDegree: state.nonDegree,
     advisorReview: state.advisorReview,
     withdrawn: state.withdrawn,
+    secondProgram: state.secondProgram || null,
   };
 }
 
@@ -117,6 +120,7 @@ class PlanStore {
       nonDegree: nonDegree || [],
       advisorReview: advisorReview || [],
       withdrawn: withdrawn || [],
+      secondProgram: null,
       uploadedMode: true,
     };
     this._reconcileNatSci();
@@ -173,6 +177,24 @@ class PlanStore {
     });
   }
 
+  // --- Second major / second audit (see second-program.js) ---
+
+  /** Replace any previous second program with `plan` (already merged) and its label. */
+  setSecondProgram(plan, info) {
+    this._commit(() => {
+      this.state.plan = plan;
+      this.state.secondProgram = info;
+    });
+  }
+
+  removeSecondProgram() {
+    if (!this.state.secondProgram) return;
+    this._commit(() => {
+      this.state.plan = stripSecondProgram(this.state.plan);
+      this.state.secondProgram = null;
+    });
+  }
+
   // --- Transfer Mode ---
 
   transferCourse(courseId) {
@@ -225,6 +247,7 @@ class PlanStore {
       nonDegree: data.nonDegree || [],
       advisorReview: data.advisorReview || [],
       withdrawn: data.withdrawn || [],
+      secondProgram: data.secondProgram || null,
       uploadedMode: true,
     };
     this._reconcileNatSci();
@@ -253,6 +276,7 @@ class PlanStore {
       nonDegree: data.nonDegree || [],
       advisorReview: data.advisorReview || [],
       withdrawn: data.withdrawn || [],
+      secondProgram: data.secondProgram || null,
       uploadedMode: true,
     };
     this.armAutosave();

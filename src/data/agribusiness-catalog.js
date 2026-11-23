@@ -11,7 +11,8 @@ export const CATEGORIES = {
   dept: { label: "Dept Core", color: "#CC0000" },
   restricted: { label: "Tech / Dept Elec", color: "#0F766E" },
   gep: { label: "GEP", color: "#1D4ED8" },
-  free: { label: "Free Elective", color: "#57534E" }
+  free: { label: "Free Elective", color: "#57534E" },
+  major2: { label: "2nd Major", color: "#B45309" }
 };
 
 // Degree-audit section number -> default category (fallback when a course has no more
@@ -383,6 +384,7 @@ export const BUCKET_TERMS = [TAKEN_TERM, IN_PROGRESS_TERM, ...LEGACY_BUCKET_TERM
 // of courses that satisfy an elective slot.
 export const MINORS = {
   "Economics": {
+    group: "Business, Economics & Policy",
     totalCr: 15,
     description: "Develop understanding of micro/macroeconomic theory, markets, government policy, and analytical skills. Only 9 extra credits needed since ARE 201 and EC/ARE 301 already count from your major.",
     requirements: [
@@ -399,6 +401,7 @@ export const MINORS = {
     notes: "Courses cannot be taken pass/fail. Up to 6 transfer credits allowed with approval."
   },
   "Business Administration": {
+    group: "Business, Economics & Policy",
     totalCr: 18,
     description: "Gain understanding of business language, economics fundamentals, financial accounting, and core business concepts. Designed primarily as a summer program — Poole recommends taking courses in summer terms. Requires 3.0 cumulative GPA to declare.",
     requirements: [
@@ -417,6 +420,7 @@ export const MINORS = {
     notes: "Must have 30+ hours completed (15 at NC State) to declare. Designed as a summer program — strongly encouraged to take courses in summer. No more than 6 transfer credits. Note: BUS 320 requires ACC 210 (not ACC 280) as prereq."
   },
   "Environmental Science": {
+    group: "Agriculture & Environment",
     totalCr: 15,
     description: "Connect your major to contemporary environmental issues. Three ES core courses plus two electives from biological, physical, social science, or advanced course groups.",
     requirements: [
@@ -434,6 +438,242 @@ export const MINORS = {
     extraCr: 15,
     gpaReq: "2.0 cumulative GPA; C- or better in each course",
     notes: "Cannot major and minor in Environmental Science. Course substitutions may be made with minor advisor approval. Contact: Erin Champion, eachampi@ncsu.edu, 919.513.2520."
+  },
+  "Political Science": {
+    group: "Business, Economics & Policy",
+    totalCr: 15,
+    url: "https://catalog.ncsu.edu/undergraduate/humanities-social-sciences/political-science/political-science-minor/",
+    verified: false,
+    description: "15 credit hours of political science (PS) courses, open to all majors. Pairs well with agricultural policy work (ARE 433) for students headed toward government, lobbying, or farm-policy careers.",
+    requirements: [
+      { code: "PS Course #1", cr: 3, note: "Any political science (PS) course", alts: [], status: "extra", majorNote: "A PS course can also fill your Social Science GEP or a Free Elective slot", options: ["PS 201", "PS 202", "PS 203", "PS 204", "PS 231", "PS 236", "PS 306", "PS 310", "PS 311", "PS 312", "PS 313", "PS 315", "PS 320", "PS 331", "PS 335", "PS 336", "PS 361", "PS 400-level seminar"] },
+      { code: "PS Course #2", cr: 3, note: "Any political science (PS) course", alts: [], status: "extra", majorNote: "Could use a Free Elective slot", options: ["PS 201", "PS 202", "PS 203", "PS 204", "PS 231", "PS 236", "PS 306", "PS 310", "PS 311", "PS 312", "PS 313", "PS 315", "PS 320", "PS 331", "PS 335", "PS 336", "PS 361", "PS 400-level seminar"] },
+      { code: "PS Course #3", cr: 3, note: "Any political science (PS) course", alts: [], status: "extra", majorNote: "Could use a Free Elective slot", options: ["PS 201", "PS 202", "PS 203", "PS 204", "PS 231", "PS 236", "PS 306", "PS 310", "PS 311", "PS 312", "PS 313", "PS 315", "PS 320", "PS 331", "PS 335", "PS 336", "PS 361", "PS 400-level seminar"] },
+      { code: "PS Course #4", cr: 3, note: "Any political science (PS) course", alts: [], status: "extra", majorNote: "Extra course", options: ["PS 201", "PS 202", "PS 203", "PS 204", "PS 231", "PS 236", "PS 306", "PS 310", "PS 311", "PS 312", "PS 313", "PS 315", "PS 320", "PS 331", "PS 335", "PS 336", "PS 361", "PS 400-level seminar"] },
+      { code: "PS Course #5", cr: 3, note: "Any political science (PS) course; the catalog may require a 400-level seminar (confirm)", alts: [], status: "extra", majorNote: "Extra course", options: ["PS 201", "PS 202", "PS 203", "PS 204", "PS 231", "PS 236", "PS 306", "PS 310", "PS 311", "PS 312", "PS 313", "PS 315", "PS 320", "PS 331", "PS 335", "PS 336", "PS 361", "PS 400-level seminar"] }
+    ],
+    extraCr: 15,
+    gpaReq: "2.0 GPA in the minor; C- or better in each course",
+    notes: "At least 9 hours must be taken at NC State. At most one course may also count toward your major's departmental requirements. The eligible-course list above is a sample; any PS course counts. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Animal Science": {
+    group: "Agriculture & Environment",
+    totalCr: 15,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/animal-science/animal-science-minor/",
+    verified: false,
+    description: "Livestock and companion-animal science: production, nutrition, and management. A natural fit for students headed to livestock operations, feed companies, or animal-agriculture finance.",
+    requirements: [
+      { code: "ANS 150", cr: 3, note: "Introduction to Animal Science (take this first, then add the minor)", alts: ["ANS 150"], status: "extra", majorNote: "Extra course — could count as a Technical Elective (ANS prefix)" },
+      { code: "ANS 230 or ANS 225", cr: 3, note: "Animal Nutrition", alts: ["ANS 230", "ANS 225"], status: "extra", majorNote: "Extra course — could count as a Technical Elective" },
+      { code: "ANS Elective #1", cr: 3, note: "Any ANS course; pick a species or discipline focus", alts: [], status: "extra", majorNote: "Could use a Technical or Dept/Tech Elective slot" },
+      { code: "ANS Elective #2", cr: 3, note: "Any ANS course", alts: [], status: "extra", majorNote: "Could use a Technical or Dept/Tech Elective slot" },
+      { code: "ANS Elective #3", cr: 3, note: "Any ANS course", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" }
+    ],
+    extraCr: 15,
+    gpaReq: "C- or better in each course",
+    notes: "Complete ANS 150, then add the minor in CODA (talk to the Animal Science department first). Not open to Animal Science majors. Must be finished by graduation. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Crop Science": {
+    group: "Agriculture & Environment",
+    totalCr: 16,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/crop-soil-sciences/crop-science-minor/",
+    verified: false,
+    description: "Field-crop production and management (grains, cotton, tobacco, forages). Useful for row-crop farm management, crop insurance, and agronomy sales.",
+    requirements: [
+      { code: "CS 213", cr: 3, note: "Crop Science", alts: ["CS 213"], status: "extra", majorNote: "Extra course — could count as a Natural Science or Technical Elective" },
+      { code: "CS 214", cr: 1, note: "Crop Science Laboratory", alts: ["CS 214"], status: "extra", majorNote: "Extra course" },
+      { code: "Crop Science Elective #1", cr: 3, note: "Approved crop science elective", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "Crop Science Elective #2", cr: 3, note: "Approved crop science elective", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "Crop Science Elective #3", cr: 3, note: "Approved crop science elective", alts: [], status: "extra", majorNote: "Could use a Dept/Tech Elective slot" },
+      { code: "Crop Science Elective #4", cr: 3, note: "Approved crop science elective", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" }
+    ],
+    extraCr: 16,
+    gpaReq: "No S/U courses",
+    notes: "Open to all majors except Plant & Soil Sciences. The approved elective list wasn't available; check the catalog page or the Crop & Soil Sciences department. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Soil Science": {
+    group: "Agriculture & Environment",
+    totalCr: 17,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/crop-soil-sciences/soil-science-minor/",
+    verified: false,
+    description: "Soil fertility, nutrient management, and land use. Useful for farm management, land appraisal, and fertilizer or ag-input businesses.",
+    requirements: [
+      { code: "SSC 200", cr: 3, note: "Soil Science", alts: ["SSC 200"], status: "extra", majorNote: "Extra course — could count as a Natural Science or Technical Elective" },
+      { code: "SSC 201", cr: 1, note: "Soil Science Laboratory", alts: ["SSC 201"], status: "extra", majorNote: "Extra course" },
+      { code: "Soil Science Elective #1", cr: 3, note: "Restricted soil science elective (e.g. SSC 341 Soil Fertility & Nutrient Management)", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot", options: ["SSC 341", "SSC 452"] },
+      { code: "Soil Science Elective #2", cr: 3, note: "Restricted soil science elective", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot", options: ["SSC 341", "SSC 452"] },
+      { code: "Soil Science Elective #3", cr: 3, note: "Restricted soil science elective", alts: [], status: "extra", majorNote: "Could use a Dept/Tech Elective slot" },
+      { code: "Soil Science Elective #4", cr: 4, note: "Restricted soil science elective (13 elective credits total)", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" }
+    ],
+    extraCr: 17,
+    gpaReq: "See catalog",
+    notes: "Open to all majors except those in the Crop & Soil Sciences department. Elective course list is partial. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Horticultural Science": {
+    group: "Agriculture & Environment",
+    totalCr: 16,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/horticultural-science/horticultural-science-minor/",
+    verified: false,
+    description: "Fruit, vegetable, nursery, and greenhouse crops. A good match for students interested in specialty-crop businesses, garden centers, or produce marketing.",
+    requirements: [
+      { code: "HS 201", cr: 4, note: "The World of Horticulture: Principles and Practices", alts: ["HS 201"], status: "extra", majorNote: "Extra course — could count as a Natural Science or Technical Elective" },
+      { code: "HS 301 or HS 203", cr: 3, note: "Plant Propagation (HS 301) or Home Plant Propagation (HS 203)", alts: ["HS 301", "HS 203"], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "HS Elective #1", cr: 3, note: "Horticulture elective", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot", options: ["HS 200", "HS 242", "HS 275", "HS 302", "HS 303", "HS 304", "HS 403", "HS 411"] },
+      { code: "HS Elective #2", cr: 3, note: "Horticulture elective", alts: [], status: "extra", majorNote: "Could use a Dept/Tech Elective slot", options: ["HS 200", "HS 242", "HS 275", "HS 302", "HS 303", "HS 304", "HS 403", "HS 411"] },
+      { code: "HS Elective #3", cr: 3, note: "Horticulture elective", alts: [], status: "extra", majorNote: "Could use a Free Elective slot", options: ["HS 200", "HS 242", "HS 275", "HS 302", "HS 303", "HS 304", "HS 403", "HS 411"] }
+    ],
+    extraCr: 16,
+    gpaReq: "2.0 GPA in minor courses",
+    notes: "Declare with the department's Director of Undergraduate Programs; certification is due by registration for your final semester. Credit hours (15 vs 16) differ between catalog years. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Food Science": {
+    group: "Agriculture & Environment",
+    totalCr: 15,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/food-bioprocessing-nutrition-science/food-science-minor/",
+    verified: false,
+    description: "How food is processed, preserved, and made safe. Pairs with agribusiness for careers in food manufacturing, quality, and supply-chain management.",
+    requirements: [
+      { code: "FS 201", cr: 3, note: "Introduction to Food Science", alts: ["FS 201"], status: "extra", majorNote: "Extra course — could count as a Technical Elective" },
+      { code: "FS Elective #1", cr: 3, note: "Any 200–400 level FS course", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "FS Elective #2", cr: 3, note: "Any 200–400 level FS course", alts: [], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "FS Elective #3", cr: 3, note: "Any 200–400 level FS course", alts: [], status: "extra", majorNote: "Could use a Dept/Tech Elective slot" },
+      { code: "FS Elective #4", cr: 3, note: "Any 200–400 level FS course (at most 1 cr of FS 493 counts)", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" }
+    ],
+    extraCr: 15,
+    gpaReq: "See catalog",
+    notes: "Certified by the Food, Bioprocessing & Nutrition Sciences department; must be completed by your graduation semester. Not the same as the separate Food Safety and Quality minor. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Extension Education": {
+    group: "Agriculture & Environment",
+    totalCr: 15,
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/agricultural-human-sciences/extension-education-minor/",
+    verified: false,
+    description: "Teaching and outreach for agricultural communities through Cooperative Extension. Good for students aiming at county Extension agent or ag-outreach roles.",
+    requirements: [
+      { code: "AEE 230", cr: 3, note: "Introduction to Cooperative Extension", alts: ["AEE 230"], status: "extra", majorNote: "Extra course" },
+      { code: "Extension Core #2", cr: 3, note: "Second required core course (see catalog)", alts: [], status: "extra", majorNote: "Extra course" },
+      { code: "Advised Elective #1", cr: 3, note: "Advised elective (e.g. Extension practicum, volunteer leadership)", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" },
+      { code: "Advised Elective #2", cr: 3, note: "Advised elective", alts: [], status: "extra", majorNote: "Could use a Free Elective slot" },
+      { code: "Advised Elective #3", cr: 3, note: "Advised elective", alts: [], status: "extra", majorNote: "Extra course" }
+    ],
+    extraCr: 15,
+    gpaReq: "C or better in every course; no credit-only grading",
+    notes: "Open to all majors. Must be completed by your graduation semester. Added Nov 2026 from NC State catalog search results while catalog.ncsu.edu was offline. Confirm against the official catalog page before relying on it."
+  },
+  "Applied Ecology": {
+    group: "Agriculture & Environment",
+    totalCr: 16,
+    url: "https://cals.ncsu.edu/applied-ecology/students/undergraduate/minor",
+    verified: true,
+    description: "Ecology applied to agriculture and natural resources, finishing with a mentored research project. Suits students interested in sustainability, conservation programs, or environmental consulting.",
+    requirements: [
+      { code: "AEC/PB 360", cr: 4, note: "Ecology (C- or better before adding the minor; needs BIO 181)", alts: ["AEC 360", "PB 360"], status: "extra", majorNote: "Extra course — could count as a Natural Science or Technical Elective" },
+      { code: "AEC 400", cr: 3, note: "Applied Ecology", alts: ["AEC 400"], status: "extra", majorNote: "Could use a Technical Elective slot" },
+      { code: "AEC 492/493", cr: 3, note: "Learning Experience in Applied Ecology (mentored project, 3–6 cr)", alts: ["AEC 492", "AEC 493"], status: "extra", majorNote: "Could use a Dept/Tech Elective slot" },
+      { code: "Ecology Elective #1", cr: 3, note: "Approved ecology elective", alts: [], status: "extra", majorNote: "Could use a Free Elective slot", options: ["AEC 203", "AEC 245", "AEC 384", "AEC 409", "AEC 419", "AEC 441", "AEC 460", "CS 213", "CS 230", "ENT 203", "FOR 404", "FW 221", "GIS 280", "HS 201", "MEA 200", "NR 300", "NR 303", "PB 200", "PB 213"] },
+      { code: "Ecology Elective #2", cr: 3, note: "Approved ecology elective (6 cr minimum)", alts: [], status: "extra", majorNote: "Extra course", options: ["AEC 203", "AEC 245", "AEC 384", "AEC 409", "AEC 419", "AEC 441", "AEC 460", "CS 213", "CS 230", "ENT 203", "FOR 404", "FW 221", "GIS 280", "HS 201", "MEA 200", "NR 300", "NR 303", "PB 200", "PB 213"] }
+    ],
+    extraCr: 16,
+    gpaReq: "C or better in all letter-graded minor courses",
+    notes: "BIO 181 and AEC/PB 360 (C- or better) are required before adding the minor in CODA. You sign an agreement with the minor coordinator before AEC 492/493 and present at the Applied Ecology research symposium. Elective list is partial."
+  }
+};
+
+// Second majors Agribusiness Management students commonly pair with (Double Major
+// Explorer). `alts`: any of these course codes already in the plan means the requirement
+// is shared with the AgBus degree. `options` turns the slot into a "Click to choose".
+// `prereqs` / `coreqs` (placement hints only) keep a course after / no earlier than the
+// listed ones; `level` places a code-less slot ("Concentration #1") like a 300-level course.
+// Researched Nov 2026 while catalog.ncsu.edu was offline, from search-index copies of the
+// catalog pages — every entry is `verified: false` until checked against the live catalog.
+export const DOUBLE_MAJORS = {
+  "Economics (BS)": {
+    degree: "Poole College of Management",
+    url: "https://catalog.ncsu.edu/undergraduate/management/economics/economics-bs/",
+    verified: false,
+    description: "The most natural pairing: AgBus already covers principles of micro and intermediate micro, so you add macro, econometrics, and upper-level EC electives. Strong prep for grad school, policy analysis, and commodity/finance jobs.",
+    requirements: [
+      { code: "EC 201/205 or ARE 201", cr: 3, note: "Principles of Microeconomics", alts: ["ARE 201", "EC 201", "EC 205"] },
+      { code: "EC 301", cr: 3, note: "Intermediate Microeconomics (confirm ARE 301 substitutes)", alts: ["EC 301", "ARE 301", "EC/ARE 301"] },
+      { code: "EC 302", cr: 3, note: "Intermediate Macroeconomics", alts: ["EC 302"] },
+      { code: "EC 351", cr: 3, note: "Econometrics I", alts: ["EC 351"] },
+      { code: "EC 451", cr: 3, note: "Econometrics II", alts: ["EC 451"], prereqs: ["EC 351"] },
+      { code: "EC 490", cr: 3, note: "Research Seminar in Economics", alts: ["EC 490"], prereqs: ["EC 302", "EC 351"] },
+      { code: "BUS 351", cr: 3, note: "Introduction to Business Analytics", alts: ["BUS 351"] },
+      { code: "EC Elective #1", cr: 3, note: "300–500 level EC elective", options: ["EC 305", "EC 336", "EC 348", "EC 404", "EC 410", "EC 413", "EC 431", "EC 437", "EC 448", "EC 449", "EC 468", "EC 474", "EC 495"] },
+      { code: "EC Elective #2", cr: 3, note: "300–500 level EC elective", options: ["EC 305", "EC 336", "EC 348", "EC 404", "EC 410", "EC 413", "EC 431", "EC 437", "EC 448", "EC 449", "EC 468", "EC 474", "EC 495"] }
+    ],
+    notes: "Poole only allows a second major without “significant overlap”; meet with Poole advising before declaring. Supporting math/statistics rules weren't confirmed."
+  },
+  "Agricultural Science (BS)": {
+    degree: "College of Agriculture & Life Sciences",
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/agricultural-human-sciences/agricultural-science-bs/",
+    verified: false,
+    description: "A broad agriculture degree built around two specializations (e.g. Animal Science, Crop Science, Horticulture, Soil Science, Food Science). Adds hands-on production knowledge to the business side of AgBus.",
+    requirements: [
+      { code: "AEE 103 or ALS 303", cr: 1, note: "Agricultural science orientation", alts: ["AEE 103", "ALS 303"] },
+      { code: "COM 110 or COM 112", cr: 3, note: "Public speaking", alts: ["COM 110", "COM 112"] },
+      { code: "CS 213 or HS 201", cr: 3, note: "Crop Science or The World of Horticulture", alts: ["CS 213", "HS 201"], options: ["CS 213", "HS 201"] },
+      { code: "SSC 200", cr: 3, note: "Soil Science", alts: ["SSC 200"] },
+      { code: "SSC 201", cr: 1, note: "Soil Science Laboratory", alts: ["SSC 201"], coreqs: ["SSC 200"] },
+      { code: "ANS 150 or PO 201", cr: 3, note: "Animal Science or Poultry Science intro", alts: ["ANS 150", "PO 201"], options: ["ANS 150", "PO 201"] },
+      { code: "AES 201, ES 100 or FS 201", cr: 3, note: "Intro agriculture/environment/food elective", alts: ["AES 201", "ES 100", "FS 201"], options: ["AES 201", "ES 100", "FS 201"] },
+      { code: "ARE 201 or EC 201/205", cr: 3, note: "Economics", alts: ["ARE 201", "EC 201", "EC 205"] },
+      { code: "Specialization A #1", level: 3, cr: 3, note: "First specialization, 300+ level course", alts: [] },
+      { code: "Specialization A #2", level: 3, cr: 3, note: "First specialization, 300+ level course", alts: [] },
+      { code: "Specialization B #1", level: 3, cr: 3, note: "Second specialization, 300+ level course", alts: [] },
+      { code: "Specialization B #2", level: 3, cr: 3, note: "Second specialization, 300+ level course", alts: [] }
+    ],
+    notes: "Each specialization needs 6+ credits at the 300 level or above, and the specializations can also earn you two CALS minors. Whether AgBus majors may use the Agricultural Business specialization wasn't confirmed."
+  },
+  "Business Administration (BS)": {
+    degree: "Poole College of Management",
+    url: "https://catalog.ncsu.edu/undergraduate/management/itao/business-administration-bs/",
+    verified: false,
+    description: "The full Poole business core plus a concentration (Finance, Entrepreneurship, People Management, Business Analytics, or Supply Chain). The biggest add-on of the options here.",
+    requirements: [
+      { code: "ACC 220", cr: 3, note: "Managerial Accounting (prerequisite; confirm)", alts: ["ACC 220"], prereqs: ["ACC 210"] },
+      { code: "BUS 320", cr: 3, note: "Financial Management", alts: ["BUS 320"] },
+      { code: "BUS 340", cr: 3, note: "Information Systems Management", alts: ["BUS 340"] },
+      { code: "BUS/ST 350", cr: 3, note: "Economics & Business Statistics", alts: ["BUS 350", "ST 350"] },
+      { code: "BUS 360", cr: 3, note: "Marketing Methods", alts: ["BUS 360"] },
+      { code: "BUS 370", cr: 3, note: "Operations & Supply Chain Management", alts: ["BUS 370"] },
+      { code: "MIE 305", cr: 3, note: "Legal & Regulatory Environment of Business", alts: ["MIE 305"] },
+      { code: "MIE 306", cr: 3, note: "Managing Ethics in Organizations", alts: ["MIE 306"] },
+      { code: "MIE 310", cr: 3, note: "Introduction to Entrepreneurship", alts: ["MIE 310"] },
+      { code: "MIE 330", cr: 3, note: "Managing People", alts: ["MIE 330"] },
+      { code: "MIE 480", cr: 3, note: "Business Policy & Strategy (capstone)", alts: ["MIE 480"], prereqs: ["BUS 320", "BUS 360", "BUS 370"] },
+      { code: "Concentration #1", level: 3, cr: 3, note: "Concentration course", alts: [] },
+      { code: "Concentration #2", level: 3, cr: 3, note: "Concentration course", alts: [] },
+      { code: "Concentration #3", level: 3, cr: 3, note: "Concentration course", alts: [] },
+      { code: "Concentration #4", level: 3, cr: 3, note: "Concentration course", alts: [] }
+    ],
+    notes: "Poole only allows a second major without “significant overlap,” doesn't guarantee seats in 400-level courses, and requires a 2.0 GPA in the Poole major. Meet with Poole advising before planning on this one."
+  },
+  "Animal Science (BS), Industry": {
+    degree: "College of Agriculture & Life Sciences",
+    url: "https://catalog.ncsu.edu/undergraduate/agriculture-life-sciences/animal-science/animal-science-bs-industry-concentration/",
+    verified: false,
+    description: "Livestock production, nutrition, and physiology for the animal-agriculture industry. Heavy on science prerequisites, so it adds the most lab-science credit.",
+    requirements: [
+      { code: "ALS 103", cr: 1, note: "CALS orientation", alts: ["ALS 103", "ALS 303", "ARE 290"] },
+      { code: "BIO 183", cr: 4, note: "Introductory Biology: Cellular and Molecular", alts: ["BIO 183"] },
+      { code: "CH 101", cr: 3, note: "Chemistry: A Molecular Science", alts: ["CH 101"] },
+      { code: "CH 102", cr: 1, note: "General Chemistry Laboratory", alts: ["CH 102"], coreqs: ["CH 101"] },
+      { code: "PY 131 or PY 211", cr: 4, note: "Physics", alts: ["PY 131", "PY 211"], options: ["PY 131", "PY 211"] },
+      { code: "MA 114", cr: 3, note: "Introduction to Finite Mathematics", alts: ["MA 114"] },
+      { code: "ANS 150", cr: 3, note: "Introduction to Animal Science", alts: ["ANS 150"] },
+      { code: "ANS 205", cr: 3, note: "Physiology of Domestic Animals", alts: ["ANS 205"] },
+      { code: "ANS 215", cr: 3, note: "Animal Science core course (see catalog)", alts: ["ANS 215"] },
+      { code: "ANS 220", cr: 3, note: "Animal Science core course (see catalog)", alts: ["ANS 220"] },
+      { code: "ANS 230", cr: 3, note: "Animal Nutrition", alts: ["ANS 230"], prereqs: ["ANS 150"] },
+      { code: "ANS 231", cr: 1, note: "Animal Nutrition Laboratory", alts: ["ANS 231"], coreqs: ["ANS 230"] },
+      { code: "ANS 400", cr: 3, note: "Animal Science senior course (see catalog)", alts: ["ANS 400"], prereqs: ["ANS 230"] },
+      { code: "ARE 303", cr: 3, note: "Farm Management", alts: ["ARE 303"] },
+      { code: "ANS Elective #1", level: 2, cr: 3, note: "Animal Science elective", alts: [] },
+      { code: "ANS Elective #2", level: 2, cr: 3, note: "Animal Science elective", alts: [] }
+    ],
+    notes: "Some of the biology/chemistry here may already count as your AgBus Natural Science electives if you choose them there. Credit values and ANS course titles weren't confirmed."
   }
 };
 
